@@ -104,19 +104,6 @@ public class ResourceCounter : MonoBehaviour
     private void ResourcePropertyChangedListener(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         UpdateResourceCounterText();
-        
-        switch (resourceType)
-        {
-            case Resource.Type.Metal:
-                Debug.Log("===============================================");
-                break;
-            case Resource.Type.Crystal:
-                Debug.Log("////////////////////////");
-                break;
-            default:
-                Debug.Break();
-                break;
-        }
     }
 
     private void BuildingPropertyChangedListener(object sender, System.ComponentModel.PropertyChangedEventArgs e)
