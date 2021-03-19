@@ -1,8 +1,8 @@
 ﻿using Realms;
 
-public class Resource : RealmObject
+internal class Resource : RealmObject
 {
-    public enum Type
+    internal enum Type
     {
         NotSet,
         Metal,
@@ -10,12 +10,12 @@ public class Resource : RealmObject
     }
 
     [PrimaryKey]
-    public string Name { get; private set; }
-    public int Amount { get; set; }
+    internal string Name { get; private set; }
+    internal int Amount { get; set; }
 
-    public Resource() { }
+    internal Resource() { }
 
-    public Resource(string name, int amount)
+    internal Resource(string name, int amount)
     {
         Name = name;
         Amount = amount;
