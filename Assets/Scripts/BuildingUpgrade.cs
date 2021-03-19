@@ -4,43 +4,24 @@ using Realms;
 
 public class BuildingUpgrade : MonoBehaviour
 {
+    #region Unity Editor
     [Header("External Settings")]
     [SerializeField] private Resource.Type resourceType = default;
-    [SerializeField] private ResourceCounter metalCounter = default;
-    [SerializeField] private ResourceCounter crystalCounter = default;
 
     [Header("Links to sub objects")]
     [SerializeField] private TMP_Text buildingLevelText = default;
     [SerializeField] private TMP_Text buildingUpgradeButtonText = default;
     [SerializeField] private TMP_Text buildingUpgradeCostText = default;
+    #endregion
 
-    public int Level
-    {
-        get
-        {
-            var building = realm.Find<Building>(resourceType.ToString());
-            if (building == null)
-            {
-                building = new Building(resourceType.ToString(), 1);
-                realm.Write(() =>
-                {
-                    realm.Add(building);
-                });
-            }
-            return building.Level;
-        }
-        set
-        {
-            var building = realm.Find<Building>(resourceType.ToString());
-            realm.Write(() =>
-            {
-                building.Level = value;
-            });
-            UpdateData();
-        }
-    }
-
+    #region Private Properties
     private Realm realm;
+    private Building building;
+    private Resource metal;
+    private Resource crystal;
+    #endregion
+
+    #region Public Functions
 
     public void BuildingUpgradeButtonClicked()
     {
@@ -48,19 +29,17 @@ public class BuildingUpgrade : MonoBehaviour
         {
             case Resource.Type.Metal:
                 {
-                    int metalCostForUpgrade = Balancing.MetalMineUpgradeMetalCostPerLevel * Level;
-                    int crystalCostForUpgrade = Balancing.MetalMineUpgradeCrystalCostPerLevel * Level;
+                    int metalCostForUpgrade = Balancing.MetalMineUpgradeMetalCostPerLevel * building.Level;
+                    int crystalCostForUpgrade = Balancing.MetalMineUpgradeCrystalCostPerLevel * building.Level;
                     BuyUpgrade(metalCostForUpgrade, crystalCostForUpgrade);
-                    metalCounter.IncrementPerCycle = Balancing.MetalIncrementPerLevel * (Level + 1);
                     break;
                 }
 
             case Resource.Type.Crystal:
                 {
-                    int metalCostForUpgrade = Balancing.CrystalMineUpgradeMetalCostPerLevel * Level;
-                    int crystalCostForUpgrade = Balancing.CrystalMineUpgradeCrystalCostPerLevel * Level;
+                    int metalCostForUpgrade = Balancing.CrystalMineUpgradeMetalCostPerLevel * building.Level;
+                    int crystalCostForUpgrade = Balancing.CrystalMineUpgradeCrystalCostPerLevel * building.Level;
                     BuyUpgrade(metalCostForUpgrade, crystalCostForUpgrade);
-                    crystalCounter.IncrementPerCycle = Balancing.CrystalIncrementPerLevel * (Level + 1);
                     break;
                 }
             case Resource.Type.NotSet:
@@ -70,27 +49,41 @@ public class BuildingUpgrade : MonoBehaviour
         UpdateData();
     }
 
-    private bool BuyUpgrade(int metalCostForUpgrade, int crystalCostForUpgrade)
-    {
-        if (metalCounter.Amount < metalCostForUpgrade || crystalCounter.Amount < crystalCostForUpgrade)
-        {
-            return false;
-        }
+    #endregion
 
-        metalCounter.Amount -= metalCostForUpgrade;
-        crystalCounter.Amount -= crystalCostForUpgrade;
-        Level++;
-
-        return true;
-    }
+    #region Unity Messages
 
     private void Awake()
     {
         realm = Realm.GetInstance();
+        building = realm.Find<Building>(resourceType.ToString());
+        if (building != null)
+        {
+            return;
+        }
+
+        switch (resourceType)
+        {
+            case Resource.Type.Metal:
+                building = new Building(resourceType.ToString(), 1);
+                break;
+            case Resource.Type.Crystal:
+                building = new Building(resourceType.ToString(), 1);
+                break;
+            default:
+                Debug.Break();
+                break;
+        }
+        realm.Write(() =>
+        {
+            realm.Add(building);
+        });
     }
 
     private void Start()
     {
+        metal = realm.Find<Resource>(Resource.Type.Metal.ToString());
+        crystal = realm.Find<Resource>(Resource.Type.Crystal.ToString());
         UpdateData();
     }
 
@@ -99,31 +92,54 @@ public class BuildingUpgrade : MonoBehaviour
         realm.Dispose();
     }
 
+    #endregion
+
+    #region Private Functions
+
+    private void BuyUpgrade(int metalCostForUpgrade, int crystalCostForUpgrade)
+    {
+        realm.Write(() =>
+        {
+            // We need to check the amounts inside the write block to block a potential other write
+            // from happening in between reading the amounts while not blocking and then writing them
+            // while they might have already been update.
+            if (metal.Amount >= metalCostForUpgrade && crystal.Amount >= crystalCostForUpgrade)
+            {
+                metal.Amount -= metalCostForUpgrade;
+                crystal.Amount -= crystalCostForUpgrade;
+                building.Level++;
+            }
+        });
+    }
+
     private void UpdateData()
     {
-        int nextLevel = Level + 1;
+        int nextLevel = building.Level + 1;
         int nextLevelMetalCost = 0;
         int nextLevelCrystalCost = 0;
         switch (resourceType)
         {
             case Resource.Type.Metal:
-                nextLevelMetalCost = Balancing.MetalMineUpgradeMetalCostPerLevel * Level;
-                nextLevelCrystalCost = Balancing.MetalMineUpgradeCrystalCostPerLevel * Level;
+                nextLevelMetalCost = Balancing.MetalMineUpgradeMetalCostPerLevel * building.Level;
+                nextLevelCrystalCost = Balancing.MetalMineUpgradeCrystalCostPerLevel * building.Level;
                 break;
             case Resource.Type.Crystal:
-                nextLevelMetalCost = Balancing.CrystalMineUpgradeMetalCostPerLevel * Level;
-                nextLevelCrystalCost = Balancing.CrystalMineUpgradeCrystalCostPerLevel * Level;
+                nextLevelMetalCost = Balancing.CrystalMineUpgradeMetalCostPerLevel * building.Level;
+                nextLevelCrystalCost = Balancing.CrystalMineUpgradeCrystalCostPerLevel * building.Level;
                 break;
             default:
                 Debug.Break();
                 break;
         }
 
-        buildingLevelText.text = resourceType.ToString() + " Mine" + "\n" + "Level " + Level;
+        buildingLevelText.text = resourceType.ToString() + " Mine" + "\n" + "Level " + building.Level;
         buildingUpgradeButtonText.text = "Build Level " + nextLevel;
         buildingUpgradeCostText.text = "Level " + nextLevel + ":" + "\n"
             + nextLevelMetalCost + " Metal" + "\n"
             + nextLevelCrystalCost + " Crystal" + "\n"
             + "(+" + Balancing.MetalIncrementPerLevel + " " + resourceType.ToString() + " / s)";
     }
+
+    #endregion
+
 }

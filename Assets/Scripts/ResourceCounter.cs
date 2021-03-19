@@ -4,119 +4,164 @@ using Realms;
 
 public class ResourceCounter : MonoBehaviour
 {
+    #region Unity Editor
     [Header("External Settings")]
     [SerializeField] private Resource.Type resourceType = default;
-
     [Header("Links to sub objects")]
     [SerializeField] private TMP_Text resourceText = default;
     [SerializeField] private ProgressBar progressBar = default;
     [SerializeField] private TMP_Text buttonText = default;
+    #endregion
 
-    public int Amount
-    {
-        get {
-            var resource = realm.Find<Resource>(resourceType.ToString());
-            if (resource == null)
-            {
-                resource = new Resource(resourceType.ToString(), 500);
-                realm.Write(() =>
-                {
-                    realm.Add(resource);
-                });
-            }
-            return resource.Amount; }
-        set
-        {
-            var resource = realm.Find<Resource>(resourceType.ToString());
-            realm.Write(() =>
-            {
-                resource.Amount = value;
-            });
-            UpdateData();
-        }
-    }
-    public bool IsInProgress { get; set; } = false;
-    public bool ShouldContinueProgress { get; set; } = false;
-
-    private int incrementPerCycle = default;
-    public int IncrementPerCycle
-    {
-        get { return incrementPerCycle; }
-        set { incrementPerCycle = value; UpdateData(); }
-    }
-
-    private float cycleProgress = 0f;
-    private float cycleSpeed = default;
+    #region Private Properties
     private Realm realm;
+    private Resource resource;
+    private Building building;
+    private bool isInProgress = false;
+    private readonly bool shouldContinueProgress = false;
+    private int incrementPerCycle = 0;
+    private float cycleProgress = 0f;
+    private float cycleSpeed = 0f;
+    #endregion
 
-    public void StartGatheringButtonClicked()
+    #region Public Functions
+
+    public void StartCollectingButtonClicked()
     {
-        IsInProgress = true;
+        isInProgress = true;
     }
+
+    #endregion
+
+    #region Unity Messages
 
     private void Awake()
     {
+        realm = Realm.GetInstance();
+        resource = realm.Find<Resource>(resourceType.ToString());
+        if (resource != null)
+        {
+            return;
+        }
+
         switch (resourceType)
         {
             case Resource.Type.Metal:
-                cycleSpeed = Balancing.MetalCounterCycleSpeed;
+                resource = new Resource(resourceType.ToString(), Balancing.metalStartingAmount);
                 break;
             case Resource.Type.Crystal:
-                cycleSpeed = Balancing.CrystalCounterCycleSpeed;
+                resource = new Resource(resourceType.ToString(), Balancing.crystalStartingAmount);
                 break;
             default:
                 Debug.Break();
                 break;
         }
-        realm = Realm.GetInstance();
+        realm.Write(() =>
+        {
+            realm.Add(resource);
+        });
     }
 
     private void Start()
     {
+        resource.PropertyChanged += ResourcePropertyChangedListener;
+        building = realm.Find<Building>(resourceType.ToString());
+        building.PropertyChanged += BuildingPropertyChangedListener;
         switch (resourceType)
         {
             case Resource.Type.Metal:
-                incrementPerCycle = Balancing.MetalIncrementPerLevel;
+                cycleSpeed = Balancing.MetalCounterCycleSpeed;
+                incrementPerCycle = Balancing.MetalIncrementPerLevel * building.Level;
                 break;
             case Resource.Type.Crystal:
-                incrementPerCycle = Balancing.CrystalIncrementPerLevel;
+                cycleSpeed = Balancing.CrystalCounterCycleSpeed;
+                incrementPerCycle = Balancing.CrystalIncrementPerLevel * building.Level;
                 break;
             default:
                 Debug.Break();
                 break;
         }
-        buttonText.text = "Gather " + resourceType.ToString();
-
-        UpdateData();
+        buttonText.text = "Collect " + resourceType.ToString();
+        UpdateResourceCounterText();
     }
 
     private void Update()
     {
-        if (IsInProgress)
+        AdvanceProgressBar();
+    }
+
+    private void OnDisable()
+    {
+        resource.PropertyChanged -= ResourcePropertyChangedListener;
+        building.PropertyChanged -= BuildingPropertyChangedListener;
+        realm.Dispose();
+    }
+
+    #endregion
+
+    #region Private Functions
+
+    private void ResourcePropertyChangedListener(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        UpdateResourceCounterText();
+        
+        switch (resourceType)
+        {
+            case Resource.Type.Metal:
+                Debug.Log("===============================================");
+                break;
+            case Resource.Type.Crystal:
+                Debug.Log("////////////////////////");
+                break;
+            default:
+                Debug.Break();
+                break;
+        }
+    }
+
+    private void BuildingPropertyChangedListener(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        switch (resourceType)
+        {
+            case Resource.Type.Metal:
+                incrementPerCycle = Balancing.MetalIncrementPerLevel * building.Level;
+                break;
+            case Resource.Type.Crystal:
+                incrementPerCycle = Balancing.CrystalIncrementPerLevel * building.Level;
+                break;
+            default:
+                Debug.Break();
+                break;
+        }
+        UpdateResourceCounterText();
+    }
+
+    private void AdvanceProgressBar()
+    {
+        if (isInProgress)
         {
             cycleProgress += cycleSpeed * Time.deltaTime;
             if (cycleProgress > 1.0f)
             {
                 cycleProgress = 0.0f;
-                Amount += incrementPerCycle;
-                UpdateData();
-                if (!ShouldContinueProgress)
+                realm.Write(() =>
                 {
-                    IsInProgress = false;
+                    resource.Amount += incrementPerCycle;
+                });
+                UpdateResourceCounterText();
+                if (!shouldContinueProgress)
+                {
+                    isInProgress = false;
                 }
             }
             progressBar.SetProgressPercentage(cycleProgress);
         }
     }
 
-    private void OnDisable()
+    private void UpdateResourceCounterText()
     {
-        realm.Dispose();
+        resourceText.text = resourceType.ToString() + ": " + resource.Amount + " (" + incrementPerCycle + " / s)";
     }
 
-    private void UpdateData()
-    {
-        resourceText.text = resourceType.ToString() + ": " + Amount + " (" + incrementPerCycle + " / s)";
-    }
-
+    #endregion
 }
