@@ -5,7 +5,8 @@ public class BuildingUpgrade : MonoBehaviour
 {
     [Header("External Settings")]
     [SerializeField] private Resource.Type resourceType = default;
-    [SerializeField] private GameManager gameManager = default;
+    [SerializeField] private ResourceCounter metalCounter = default;
+    [SerializeField] private ResourceCounter crystalCounter = default;
     [Header("Links to sub objects")]
     [SerializeField] private TMP_Text buildingLevelText = default;
     [SerializeField] private TMP_Text buildingUpgradeButtonText = default;
@@ -15,11 +16,28 @@ public class BuildingUpgrade : MonoBehaviour
 
     public void BuildingUpgradeButtonClicked()
     {
-        bool canUpgradeBuilding = gameManager.BuildingUpgradeButtonClicked(resourceType);
+        bool canUpgradeBuilding = CheckCanBuildUpgrde(resourceType);
         if (canUpgradeBuilding)
         {
             level++;
             UpdateData();
+        }
+    }
+
+    private bool CheckCanBuildUpgrde(Resource.Type resourceType)
+    {
+        int metalCostForUpgrade = Balancing.MetalMineUpgradeMetalCostPerLevel * level;
+        int crystalCostForUpgrade = Balancing.MetalMineUpgradeCrystalCostPerLevel * level;
+        if (metalCounter.Amount >= metalCostForUpgrade && crystalCounter.Amount >= crystalCostForUpgrade)
+        {
+            metalCounter.Amount -= metalCostForUpgrade;
+            crystalCounter.Amount -= crystalCostForUpgrade;
+            metalCounter.IncrementPerCycle = Balancing.MetalIncrementPerLevel * (level + 1);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 

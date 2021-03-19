@@ -843,7 +843,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b74bc27244a9b4489822ba8f6a662f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 3624152635405571454}
 --- !u!224 &978357390 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8359014741579701950, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
@@ -878,15 +877,23 @@ PrefabInstance:
     - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: gameManager
       value: 
-      objectReference: {fileID: 3624152635405571454}
+      objectReference: {fileID: 0}
     - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: buildingType
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
+      propertyPath: metalCounter
+      value: 
+      objectReference: {fileID: 978357391}
+    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: resourceType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
+      propertyPath: crystalCounter
+      value: 
+      objectReference: {fileID: 112401552}
     - target: {fileID: 4523642416663488679, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -978,17 +985,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4523642416663488679, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
   m_PrefabInstance: {fileID: 1530684715}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1530684717 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-  m_PrefabInstance: {fileID: 1530684715}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d32d2a3ea0e253d4b946e9c660936da4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1629613733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1124,7 +1120,7 @@ PrefabInstance:
     - target: {fileID: 978357391, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
       propertyPath: gameManager
       value: 
-      objectReference: {fileID: 3624152635405571454}
+      objectReference: {fileID: 0}
     - target: {fileID: 978357391, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
       propertyPath: resourceType
       value: 2
@@ -1246,15 +1242,23 @@ PrefabInstance:
     - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: gameManager
       value: 
-      objectReference: {fileID: 3624152635405571454}
+      objectReference: {fileID: 0}
     - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: buildingType
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
+      propertyPath: metalCounter
+      value: 
+      objectReference: {fileID: 978357391}
+    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: resourceType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
+      propertyPath: crystalCounter
+      value: 
+      objectReference: {fileID: 112401552}
     - target: {fileID: 4523642416663488679, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1341,17 +1345,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
---- !u!114 &1746137884 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-  m_PrefabInstance: {fileID: 1746137883}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d32d2a3ea0e253d4b946e9c660936da4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1746137885 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4523642416663488679, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
@@ -1491,53 +1484,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1998409112}
   m_CullTransparentMesh: 1
---- !u!4 &3624152635405571449
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3624152635405571455}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3624152635405571454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3624152635405571455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9fec0559c514cfd408cc007a64b97dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  metalCounter: {fileID: 978357391}
-  metalMineUpgrade: {fileID: 1530684717}
-  crystalCounter: {fileID: 112401552}
-  crystalMineUpgrade: {fileID: 1746137884}
---- !u!1 &3624152635405571455
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3624152635405571449}
-  - component: {fileID: 3624152635405571454}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1001 &8359014741750583856
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1552,7 +1498,7 @@ PrefabInstance:
     - target: {fileID: 978357391, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
       propertyPath: gameManager
       value: 
-      objectReference: {fileID: 3624152635405571454}
+      objectReference: {fileID: 0}
     - target: {fileID: 978357391, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
       propertyPath: resourceType
       value: 1
