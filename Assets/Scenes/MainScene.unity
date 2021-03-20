@@ -1257,5 +1257,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Worker
       objectReference: {fileID: 0}
+    - target: {fileID: 2894907035056461648, guid: 25977e6bbf8df7044a348bd5870ddb51, type: 3}
+      propertyPath: m_text
+      value: 'Worker: xxx
+
+        (xxx Metal, xxx Crystal)'
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 25977e6bbf8df7044a348bd5870ddb51, type: 3}
