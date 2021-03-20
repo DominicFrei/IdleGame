@@ -62,32 +62,22 @@ public class BuildingUpgrade : MonoBehaviour
             return;
         }
 
-        switch (resourceType)
-        {
-            case Resource.Type.Metal:
-                building = new Building(resourceType.ToString(), 1);
-                break;
-            case Resource.Type.Crystal:
-                building = new Building(resourceType.ToString(), 1);
-                break;
-            default:
-                Debug.Break();
-                break;
-        }
+        building = new Building(resourceType.ToString(), 1);
         realm.Write(() =>
         {
             realm.Add(building);
         });
+
+        metal = realm.Find<Resource>(Resource.Type.Metal.ToString());
+        crystal = realm.Find<Resource>(Resource.Type.Crystal.ToString());
     }
 
     private void Start()
     {
-        metal = realm.Find<Resource>(Resource.Type.Metal.ToString());
-        crystal = realm.Find<Resource>(Resource.Type.Crystal.ToString());
         UpdateData();
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         realm.Dispose();
     }

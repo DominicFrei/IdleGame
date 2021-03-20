@@ -19,9 +19,9 @@ public class ResourceCounter : MonoBehaviour
     private Building building;
     private bool isInProgress = false;
     private readonly bool shouldContinueProgress = false;
-    private int incrementPerCycle = 0;
-    private float cycleProgress = 0f;
-    private float cycleSpeed = 0f;
+    private int incrementPerCycle = default;
+    private float cycleProgress = default;
+    private float cycleSpeed = default;
     #endregion
 
     #region Public Functions
@@ -64,25 +64,11 @@ public class ResourceCounter : MonoBehaviour
 
     private void Start()
     {
-        resource.PropertyChanged += ResourcePropertyChangedListener;
         building = realm.Find<Building>(resourceType.ToString());
+        resource.PropertyChanged += ResourcePropertyChangedListener;
         building.PropertyChanged += BuildingPropertyChangedListener;
-        switch (resourceType)
-        {
-            case Resource.Type.Metal:
-                cycleSpeed = Balancing.MetalCounterCycleSpeed;
-                incrementPerCycle = Balancing.MetalIncrementPerLevel * building.Level;
-                break;
-            case Resource.Type.Crystal:
-                cycleSpeed = Balancing.CrystalCounterCycleSpeed;
-                incrementPerCycle = Balancing.CrystalIncrementPerLevel * building.Level;
-                break;
-            default:
-                Debug.Break();
-                break;
-        }
         buttonText.text = "Collect " + resourceType.ToString();
-        UpdateResourceCounterText();
+        RecalculateIncrementPerCycle();
     }
 
     private void Update()
@@ -94,6 +80,10 @@ public class ResourceCounter : MonoBehaviour
     {
         resource.PropertyChanged -= ResourcePropertyChangedListener;
         building.PropertyChanged -= BuildingPropertyChangedListener;
+    }
+
+    private void OnDestroy()
+    {
         realm.Dispose();
     }
 
@@ -108,19 +98,7 @@ public class ResourceCounter : MonoBehaviour
 
     private void BuildingPropertyChangedListener(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        switch (resourceType)
-        {
-            case Resource.Type.Metal:
-                incrementPerCycle = Balancing.MetalIncrementPerLevel * building.Level;
-                break;
-            case Resource.Type.Crystal:
-                incrementPerCycle = Balancing.CrystalIncrementPerLevel * building.Level;
-                break;
-            default:
-                Debug.Break();
-                break;
-        }
-        UpdateResourceCounterText();
+        RecalculateIncrementPerCycle();
     }
 
     private void AdvanceProgressBar()
@@ -143,6 +121,25 @@ public class ResourceCounter : MonoBehaviour
             }
             progressBar.SetProgressPercentage(cycleProgress);
         }
+    }
+
+    private void RecalculateIncrementPerCycle()
+    {
+        switch (resourceType)
+        {
+            case Resource.Type.Metal:
+                cycleSpeed = Balancing.MetalCounterCycleSpeed;
+                incrementPerCycle = Balancing.MetalIncrementPerLevel * building.Level;
+                break;
+            case Resource.Type.Crystal:
+                cycleSpeed = Balancing.CrystalCounterCycleSpeed;
+                incrementPerCycle = Balancing.CrystalIncrementPerLevel * building.Level;
+                break;
+            default:
+                Debug.Break();
+                break;
+        }
+        UpdateResourceCounterText();
     }
 
     private void UpdateResourceCounterText()

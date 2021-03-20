@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2894907034611165753}
   - component: {fileID: 2894907034611165752}
   m_Layer: 5
-  m_Name: ResourceCollector
+  m_Name: Worker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24,7 +24,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2894907034611165754}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -464.95053}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -50,11 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b74bc27244a9b4489822ba8f6a662f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceType: 0
-  metalCounter: {fileID: 0}
-  crystalCounter: {fileID: 0}
-  unitText: {fileID: 0}
-  buyUnitText: {fileID: 0}
+  unitText: {fileID: 2894907035056461648}
 --- !u!1 &2894907035021674609
 GameObject:
   m_ObjectHideFlags: 0
@@ -68,7 +64,7 @@ GameObject:
   - component: {fileID: 2894907035021674622}
   - component: {fileID: 2894907035021674623}
   m_Layer: 5
-  m_Name: ResourceCollectorButton
+  m_Name: WorkerButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,7 +171,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2894907035021674622}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2894907034611165752}
+        m_TargetAssemblyTypeName: Worker, Assembly-CSharp
+        m_MethodName: BuyWorkerButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2894907035056461650
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,7 +196,7 @@ GameObject:
   - component: {fileID: 2894907035056461663}
   - component: {fileID: 2894907035056461648}
   m_Layer: 5
-  m_Name: ResourceCollectorText
+  m_Name: WorkerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -324,7 +332,7 @@ GameObject:
   - component: {fileID: 2894907035633845434}
   - component: {fileID: 2894907035633845435}
   m_Layer: 5
-  m_Name: ResourceCollectorButtonText
+  m_Name: WorkerButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -377,7 +385,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Build Resource Collector
+  m_text: Buy Worker
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
