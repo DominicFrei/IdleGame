@@ -67,13 +67,12 @@ public class BuildingUpgrade : MonoBehaviour
         {
             realm.Add(building);
         });
-
-        metal = realm.Find<Resource>(Resource.Type.Metal.ToString());
-        crystal = realm.Find<Resource>(Resource.Type.Crystal.ToString());
     }
 
     private void Start()
     {
+        metal = realm.Find<Resource>(Resource.Type.Metal.ToString());
+        crystal = realm.Find<Resource>(Resource.Type.Crystal.ToString());
         UpdateData();
     }
 

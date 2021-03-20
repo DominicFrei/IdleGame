@@ -1,25 +1,25 @@
 ﻿using Realms;
 
-internal class Resource : RealmObject
+internal class Unit : RealmObject
 {
     internal enum Type
     {
         NotSet,
-        Metal,
-        Crystal
+        Worker
     }
 
     [PrimaryKey]
     internal string Name { get; private set; } = Type.NotSet.ToString();
     internal int Amount { get; set; } = default;
-    internal int AssignedWorkers { get; set; } = default;
 
-    internal Resource() { }
+    internal int Available { get; set; } = default;
 
-    internal Resource(string name, int amount, int assignedWorkers)
+    internal Unit() { }
+
+    internal Unit(string name, int amount, int available)
     {
         Name = name;
         Amount = amount;
-        AssignedWorkers = assignedWorkers;
+        Available = available;
     }
 }

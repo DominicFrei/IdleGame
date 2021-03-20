@@ -3,8 +3,8 @@
 internal class Building : RealmObject
 {
     [PrimaryKey]
-    internal string Name { get; private set; }
-    internal int Level { get; set; }
+    internal string Name { get; private set; } = Resource.Type.NotSet.ToString();
+    internal int Level { get; set; } = 1;
 
     internal Building() { }
 

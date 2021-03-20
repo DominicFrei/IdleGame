@@ -10,15 +10,13 @@ public class ResourceCounter : MonoBehaviour
     [Header("Links to sub objects")]
     [SerializeField] private TMP_Text resourceText = default;
     [SerializeField] private ProgressBar progressBar = default;
-    [SerializeField] private TMP_Text buttonText = default;
     #endregion
 
     #region Private Properties
     private Realm realm;
     private Resource resource;
     private Building building;
-    private bool isInProgress = false;
-    private readonly bool shouldContinueProgress = false;
+    private Unit workers;
     private int incrementPerCycle = default;
     private float cycleProgress = default;
     private float cycleSpeed = default;
@@ -26,9 +24,30 @@ public class ResourceCounter : MonoBehaviour
 
     #region Public Functions
 
-    public void StartCollectingButtonClicked()
+    public void AddWorkerButtonClicked()
     {
-        isInProgress = true;
+        realm.Write(() =>
+        {
+            if (workers.Available > 0 && resource.AssignedWorkers < building.Level)
+            {
+                workers.Available--;
+                resource.AssignedWorkers++;
+                UpdateResourceCounterText();
+            }
+        });
+    }
+
+    public void RemoveWorkerButtonClicked()
+    {
+        realm.Write(() =>
+        {
+            if (resource.AssignedWorkers > 0)
+            {
+                resource.AssignedWorkers--;
+                workers.Available++;
+                UpdateResourceCounterText();
+            }
+        });
     }
 
     #endregion
@@ -47,10 +66,10 @@ public class ResourceCounter : MonoBehaviour
         switch (resourceType)
         {
             case Resource.Type.Metal:
-                resource = new Resource(resourceType.ToString(), Balancing.metalStartingAmount);
+                resource = new Resource(resourceType.ToString(), Balancing.metalStartingAmount, 0);
                 break;
             case Resource.Type.Crystal:
-                resource = new Resource(resourceType.ToString(), Balancing.crystalStartingAmount);
+                resource = new Resource(resourceType.ToString(), Balancing.crystalStartingAmount, 0);
                 break;
             default:
                 Debug.Break();
@@ -67,7 +86,7 @@ public class ResourceCounter : MonoBehaviour
         building = realm.Find<Building>(resourceType.ToString());
         resource.PropertyChanged += ResourcePropertyChangedListener;
         building.PropertyChanged += BuildingPropertyChangedListener;
-        buttonText.text = "Collect " + resourceType.ToString();
+        workers = realm.Find<Unit>(Unit.Type.Worker.ToString());
         RecalculateIncrementPerCycle();
     }
 
@@ -103,21 +122,17 @@ public class ResourceCounter : MonoBehaviour
 
     private void AdvanceProgressBar()
     {
-        if (isInProgress)
+        if (resource.AssignedWorkers > 0)
         {
-            cycleProgress += cycleSpeed * Time.deltaTime;
-            if (cycleProgress > 1.0f)
+            cycleProgress += cycleSpeed * resource.AssignedWorkers * Time.deltaTime;
+            if (cycleProgress > 1f)
             {
-                cycleProgress = 0.0f;
+                cycleProgress = 0f;
                 realm.Write(() =>
                 {
                     resource.Amount += incrementPerCycle;
                 });
                 UpdateResourceCounterText();
-                if (!shouldContinueProgress)
-                {
-                    isInProgress = false;
-                }
             }
             progressBar.SetProgressPercentage(cycleProgress);
         }
@@ -144,7 +159,9 @@ public class ResourceCounter : MonoBehaviour
 
     private void UpdateResourceCounterText()
     {
-        resourceText.text = resourceType.ToString() + ": " + resource.Amount + " (" + incrementPerCycle + " / s)";
+        resourceText.text = resourceType.ToString() + ": " + resource.Amount + "\n"
+            + "Workers: " + resource.AssignedWorkers + " / " + building.Level + "\n"
+            + " (" + incrementPerCycle + " / worker / second)";
     }
 
     #endregion
