@@ -8,7 +8,8 @@ public class ResourceCounter : MonoBehaviour
     [Header("External Settings")]
     [SerializeField] private Resource.Type resourceType = default;
     [Header("Links to sub objects")]
-    [SerializeField] private TMP_Text resourceText = default;
+    [SerializeField] private TMP_Text resourceAmountText = default;
+    [SerializeField] private TMP_Text workerAmountText = default;
     [SerializeField] private ProgressBar progressBar = default;
     #endregion
 
@@ -159,9 +160,8 @@ public class ResourceCounter : MonoBehaviour
 
     private void UpdateResourceCounterText()
     {
-        resourceText.text = resourceType.ToString() + ": " + resource.Amount + "\n"
-            + "Workers: " + resource.AssignedWorkers + " / " + building.Level + "\n"
-            + " (" + incrementPerCycle + " / worker / second)";
+        resourceAmountText.text = resourceType.ToString() + ": " + resource.Amount;
+        workerAmountText.text = "Workers: " + resource.AssignedWorkers + " / " + building.Level;
     }
 
     #endregion

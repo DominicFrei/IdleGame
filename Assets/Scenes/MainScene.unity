@@ -236,17 +236,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
---- !u!114 &102035008 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 978357391, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
-  m_PrefabInstance: {fileID: 102035007}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e300827a1a676674eb4d8fca78cbe49f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &102035009 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8359014741579701950, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
@@ -627,23 +616,8 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8359014742454870248, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
-      propertyPath: m_Value
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
---- !u!114 &712646164 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 978357391, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
-  m_PrefabInstance: {fileID: 712646163}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e300827a1a676674eb4d8fca78cbe49f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &712646165 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8359014741579701950, guid: 0d5a00078b7703d4884de627444c877b, type: 3}
@@ -911,14 +885,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 909970719}
     m_Modifications:
-    - target: {fileID: 1692302477153693159, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -927,62 +893,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.0000038146973
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4523642416663488676, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: m_Name
       value: MetalMineUpgrade
       objectReference: {fileID: 0}
     - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: balancing
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: gameManager
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: buildingType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: metalCounter
-      value: 
-      objectReference: {fileID: 712646164}
-    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: resourceType
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: crystalCounter
-      value: 
-      objectReference: {fileID: 102035008}
     - target: {fileID: 4523642416663488679, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1081,14 +999,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 909970719}
     m_Modifications:
-    - target: {fileID: 1692302477153693159, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1097,62 +1007,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.0000038146973
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692302477579713923, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4523642416663488676, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: m_Name
       value: CrystalMineUpgrade
       objectReference: {fileID: 0}
     - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: balancing
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: gameManager
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: buildingType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: metalCounter
-      value: 
-      objectReference: {fileID: 712646164}
-    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: resourceType
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 4523642416663488678, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
-      propertyPath: crystalCounter
-      value: 
-      objectReference: {fileID: 102035008}
     - target: {fileID: 4523642416663488679, guid: 212ffa4092aedce4aab0ff668cfc6ad2, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

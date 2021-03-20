@@ -103,7 +103,6 @@ public class BuildingUpgrade : MonoBehaviour
 
     private void UpdateData()
     {
-        int nextLevel = building.Level + 1;
         int nextLevelMetalCost = 0;
         int nextLevelCrystalCost = 0;
         switch (resourceType)
@@ -122,8 +121,8 @@ public class BuildingUpgrade : MonoBehaviour
         }
 
         buildingLevelText.text = resourceType.ToString() + " Mine" + "\n" + "Level " + building.Level;
-        buildingUpgradeButtonText.text = "Build Level " + nextLevel;
-        buildingUpgradeCostText.text = "Level " + nextLevel + ":" + "\n"
+        buildingUpgradeButtonText.text = "Build Level " + building.Level;
+        buildingUpgradeCostText.text = "Level " + building.Level + ":" + "\n"
             + nextLevelMetalCost + " Metal" + "\n"
             + nextLevelCrystalCost + " Crystal" + "\n"
             + "(+" + Balancing.MetalIncrementPerLevel + " " + resourceType.ToString() + " / s)";
