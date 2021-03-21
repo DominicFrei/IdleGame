@@ -19,7 +19,6 @@ public class ResourceCounter : MonoBehaviour
     private Building building;
     private Unit workers;
     private int incrementPerCycle = default;
-    private float cycleProgress = default;
     private float cycleSpeed = default;
     #endregion
 
@@ -67,10 +66,10 @@ public class ResourceCounter : MonoBehaviour
         switch (resourceType)
         {
             case Resource.Type.Metal:
-                resource = new Resource(resourceType.ToString(), Balancing.metalStartingAmount, 0);
+                resource = new Resource(resourceType.ToString(), Balancing.metalStartingAmount);
                 break;
             case Resource.Type.Crystal:
-                resource = new Resource(resourceType.ToString(), Balancing.crystalStartingAmount, 0);
+                resource = new Resource(resourceType.ToString(), Balancing.crystalStartingAmount);
                 break;
             default:
                 Debug.Break();
@@ -85,9 +84,11 @@ public class ResourceCounter : MonoBehaviour
     private void Start()
     {
         building = realm.Find<Building>(resourceType.ToString());
+        workers = realm.Find<Unit>(Unit.Type.Worker.ToString());
+
         resource.PropertyChanged += ResourcePropertyChangedListener;
         building.PropertyChanged += BuildingPropertyChangedListener;
-        workers = realm.Find<Unit>(Unit.Type.Worker.ToString());
+        
         RecalculateIncrementPerCycle();
     }
 
@@ -125,17 +126,17 @@ public class ResourceCounter : MonoBehaviour
     {
         if (resource.AssignedWorkers > 0)
         {
-            cycleProgress += cycleSpeed * resource.AssignedWorkers * Time.deltaTime;
-            if (cycleProgress > 1f)
+            realm.Write(() =>
             {
-                cycleProgress = 0f;
-                realm.Write(() =>
+                resource.CycleProgress += cycleSpeed * resource.AssignedWorkers * Time.deltaTime;
+                if (resource.CycleProgress > 1f)
                 {
+                    resource.CycleProgress = 0f;
                     resource.Amount += incrementPerCycle;
-                });
-                UpdateResourceCounterText();
-            }
-            progressBar.SetProgressPercentage(cycleProgress);
+                }
+            });
+            UpdateResourceCounterText();
+            progressBar.SetProgressPercentage(resource.CycleProgress);
         }
     }
 

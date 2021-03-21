@@ -25,10 +25,12 @@ public class WorkerTraining : MonoBehaviour
             // We need to check the amounts inside the write block to block a potential other write
             // from happening in between reading the amounts while not blocking and then writing them
             // while they might have already been update.
-            if (metal.Amount >= Balancing.MetalCostPerWorker && crystal.Amount >= Balancing.CrystalCostPerWorker)
+            int metalCostForNextWorker = Balancing.MetalCostForNextWorker(workers.Amount);
+            int crystalCostForNextWorker = Balancing.CrystalCostForNextWorker(workers.Amount);
+            if (metal.Amount >= metalCostForNextWorker && crystal.Amount >= crystalCostForNextWorker)
             {
-                metal.Amount -= Balancing.MetalCostPerWorker;
-                crystal.Amount -= Balancing.CrystalCostPerWorker;
+                metal.Amount -= metalCostForNextWorker;
+                crystal.Amount -= crystalCostForNextWorker;
                 workers.Amount++;
                 workers.Available++;
                 UpdateText();
@@ -58,7 +60,9 @@ public class WorkerTraining : MonoBehaviour
     {
         metal = realm.Find<Resource>(Resource.Type.Metal.ToString());
         crystal = realm.Find<Resource>(Resource.Type.Crystal.ToString());
+
         workers.PropertyChanged += WorkersPropertyChangedListener;
+
         UpdateText();
     }
 
@@ -80,7 +84,7 @@ public class WorkerTraining : MonoBehaviour
     private void UpdateText()
     {
         unitText.text = "Available Workers: " + workers.Available + " / " + workers.Amount + "\n"
-            + "(" + Balancing.MetalCostPerWorker + " Metal, " + Balancing.CrystalCostPerWorker + " Crystal)";
+            + "(" + Balancing.MetalCostForNextWorker(workers.Amount) + " Metal, " + Balancing.CrystalCostForNextWorker(workers.Amount) + " Crystal)";
     }
 
     #endregion

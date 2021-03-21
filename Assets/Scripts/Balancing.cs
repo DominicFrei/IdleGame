@@ -10,6 +10,10 @@ internal sealed class Balancing
     public static readonly int MetalMineUpgradeCrystalCostPerLevel = 50;
     public static readonly int CrystalMineUpgradeMetalCostPerLevel = 100;
     public static readonly int CrystalMineUpgradeCrystalCostPerLevel = 50;
-    public static readonly int MetalCostPerWorker = 100;
-    public static readonly int CrystalCostPerWorker = 100;
+
+    private static readonly int MetalCostPerWorker = 100;
+    private static readonly int CrystalCostPerWorker = 100;
+
+    public static int MetalCostForNextWorker(int totalWorkerCount) => MetalCostPerWorker * (totalWorkerCount + 1);
+    public static int CrystalCostForNextWorker(int totalWorkerCount) => CrystalCostPerWorker * (totalWorkerCount + 1);
 }

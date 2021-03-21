@@ -13,13 +13,13 @@ internal class Resource : RealmObject
     internal string Name { get; private set; } = Type.NotSet.ToString();
     internal int Amount { get; set; } = default;
     internal int AssignedWorkers { get; set; } = default;
+    internal float CycleProgress { get; set; } = default;
 
     internal Resource() { }
 
-    internal Resource(string name, int amount, int assignedWorkers)
+    internal Resource(string name, int amount)
     {
         Name = name;
         Amount = amount;
-        AssignedWorkers = assignedWorkers;
     }
 }
