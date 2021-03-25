@@ -22,9 +22,6 @@ public class WorkerTraining : MonoBehaviour
     {
         realm.Write(() =>
         {
-            // We need to check the amounts inside the write block to block a potential other write
-            // from happening in between reading the amounts while not blocking and then writing them
-            // while they might have already been update.
             int metalCostForNextWorker = Balancing.MetalCostForNextWorker(workers.Amount);
             int crystalCostForNextWorker = Balancing.CrystalCostForNextWorker(workers.Amount);
             if (metal.Amount >= metalCostForNextWorker && crystal.Amount >= crystalCostForNextWorker)
@@ -48,11 +45,7 @@ public class WorkerTraining : MonoBehaviour
         workers = realm.Find<Unit>(Unit.Type.Worker.ToString());
         if (workers == null)
         {
-            workers = new Unit(Unit.Type.Worker.ToString(), 0, 0);
-            realm.Write(() =>
-            {
-                realm.Add(workers);
-            });
+            throw new System.Exception("Game not correctly initialised.");
         }
     }
 

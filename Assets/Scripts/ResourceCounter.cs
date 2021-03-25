@@ -28,7 +28,7 @@ public class ResourceCounter : MonoBehaviour
     {
         realm.Write(() =>
         {
-            if (workers.Available > 0 && resource.AssignedWorkers < building.Level)
+            if (workers.Available > 0 && resource.AssignedWorkers < Balancing.MaximumWorkersPossible(building.CurrentLevel))
             {
                 workers.Available--;
                 resource.AssignedWorkers++;
@@ -58,27 +58,10 @@ public class ResourceCounter : MonoBehaviour
     {
         realm = Realm.GetInstance();
         resource = realm.Find<Resource>(resourceType.ToString());
-        if (resource != null)
+        if (resource == null)
         {
-            return;
+            throw new System.Exception("Game not correctly initialised.");
         }
-
-        switch (resourceType)
-        {
-            case Resource.Type.Metal:
-                resource = new Resource(resourceType.ToString(), Balancing.metalStartingAmount);
-                break;
-            case Resource.Type.Crystal:
-                resource = new Resource(resourceType.ToString(), Balancing.crystalStartingAmount);
-                break;
-            default:
-                Debug.Break();
-                break;
-        }
-        realm.Write(() =>
-        {
-            realm.Add(resource);
-        });
     }
 
     private void Start()
@@ -88,7 +71,7 @@ public class ResourceCounter : MonoBehaviour
 
         resource.PropertyChanged += ResourcePropertyChangedListener;
         building.PropertyChanged += BuildingPropertyChangedListener;
-        
+
         RecalculateIncrementPerCycle();
     }
 
@@ -142,27 +125,15 @@ public class ResourceCounter : MonoBehaviour
 
     private void RecalculateIncrementPerCycle()
     {
-        switch (resourceType)
-        {
-            case Resource.Type.Metal:
-                cycleSpeed = Balancing.MetalCounterCycleSpeed;
-                incrementPerCycle = Balancing.MetalIncrementPerLevel * building.Level;
-                break;
-            case Resource.Type.Crystal:
-                cycleSpeed = Balancing.CrystalCounterCycleSpeed;
-                incrementPerCycle = Balancing.CrystalIncrementPerLevel * building.Level;
-                break;
-            default:
-                Debug.Break();
-                break;
-        }
+        cycleSpeed = Balancing.CycleSpeed(resourceType);
+        incrementPerCycle = Balancing.IncrementPerCycle(resourceType, building.CurrentLevel);
         UpdateResourceCounterText();
     }
 
     private void UpdateResourceCounterText()
     {
         resourceAmountText.text = resourceType.ToString() + ": " + resource.Amount;
-        workerAmountText.text = "Workers: " + resource.AssignedWorkers + " / " + building.Level;
+        workerAmountText.text = "Workers: " + resource.AssignedWorkers + " / " + Balancing.MaximumWorkersPossible(building.CurrentLevel);
     }
 
     #endregion

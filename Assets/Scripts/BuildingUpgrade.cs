@@ -9,9 +9,12 @@ public class BuildingUpgrade : MonoBehaviour
     [SerializeField] private Resource.Type resourceType = default;
 
     [Header("Links to sub objects")]
-    [SerializeField] private TMP_Text buildingLevelText = default;
-    [SerializeField] private TMP_Text buildingUpgradeButtonText = default;
-    [SerializeField] private TMP_Text buildingUpgradeCostText = default;
+    [SerializeField] private TMP_Text textName = default;
+    [SerializeField] private TMP_Text textCurrentLevel = default;
+    [SerializeField] private TMP_Text textMaximumLevel = default;
+    [SerializeField] private TMP_Text textbutton = default;
+    [SerializeField] private TMP_Text textUpgradeCost = default;
+    [SerializeField] private TMP_Text textAssignedWorkers = default;
     #endregion
 
     #region Private Properties
@@ -19,33 +22,41 @@ public class BuildingUpgrade : MonoBehaviour
     private Building building;
     private Resource metal;
     private Resource crystal;
+    private Unit workers;
     #endregion
 
     #region Public Functions
 
     public void BuildingUpgradeButtonClicked()
     {
-        switch (resourceType)
-        {
-            case Resource.Type.Metal:
-                {
-                    int metalCostForUpgrade = Balancing.MetalMineUpgradeMetalCostPerLevel * building.Level;
-                    int crystalCostForUpgrade = Balancing.MetalMineUpgradeCrystalCostPerLevel * building.Level;
-                    BuyUpgrade(metalCostForUpgrade, crystalCostForUpgrade);
-                    break;
-                }
+        (int nextLevelMetalCost, int nextLevelCrystalCost) = Balancing.BuldingUpgradeCost(resourceType, building.MaximumLevel + 1);
+        BuyUpgrade(nextLevelMetalCost, nextLevelCrystalCost);
+        UpdateData();
+    }
 
-            case Resource.Type.Crystal:
-                {
-                    int metalCostForUpgrade = Balancing.CrystalMineUpgradeMetalCostPerLevel * building.Level;
-                    int crystalCostForUpgrade = Balancing.CrystalMineUpgradeCrystalCostPerLevel * building.Level;
-                    BuyUpgrade(metalCostForUpgrade, crystalCostForUpgrade);
-                    break;
-                }
-            case Resource.Type.NotSet:
-                Debug.Break();
-                break;
-        }
+    public void AddWorkerButtonClicked()
+    {
+        realm.Write(() =>
+        {
+            if (workers.Available > 0)
+            {
+                workers.Available--;
+                building.WorkersAssigend++;
+            }
+        });
+        UpdateData();
+    }
+
+    public void RemoveWorkerButtonClicked()
+    {
+        realm.Write(() =>
+        {
+            if (building.WorkersAssigend > 0)
+            {
+                building.WorkersAssigend--;
+                workers.Available++;
+            }
+        });
         UpdateData();
     }
 
@@ -57,22 +68,18 @@ public class BuildingUpgrade : MonoBehaviour
     {
         realm = Realm.GetInstance();
         building = realm.Find<Building>(resourceType.ToString());
-        if (building != null)
+        if (building == null)
         {
-            return;
+            throw new System.Exception("Game not correctly initialised.");
         }
-
-        building = new Building(resourceType.ToString(), 1);
-        realm.Write(() =>
-        {
-            realm.Add(building);
-        });
     }
 
     private void Start()
     {
         metal = realm.Find<Resource>(Resource.Type.Metal.ToString());
         crystal = realm.Find<Resource>(Resource.Type.Crystal.ToString());
+        workers = realm.Find<Unit>(Unit.Type.Worker.ToString());
+
         UpdateData();
     }
 
@@ -85,47 +92,31 @@ public class BuildingUpgrade : MonoBehaviour
 
     #region Private Functions
 
-    private void BuyUpgrade(int metalCostForUpgrade, int crystalCostForUpgrade)
+    private void BuyUpgrade(int nextLevelMetalCost, int nextLevelCrystalCost)
     {
         realm.Write(() =>
         {
-            // We need to check the amounts inside the write block to block a potential other write
-            // from happening in between reading the amounts while not blocking and then writing them
-            // while they might have already been update.
-            if (metal.Amount >= metalCostForUpgrade && crystal.Amount >= crystalCostForUpgrade)
+            if (metal.Amount >= nextLevelMetalCost && crystal.Amount >= nextLevelCrystalCost)
             {
-                metal.Amount -= metalCostForUpgrade;
-                crystal.Amount -= crystalCostForUpgrade;
-                building.Level++;
+                metal.Amount -= nextLevelMetalCost;
+                crystal.Amount -= nextLevelCrystalCost;
+                building.MaximumLevel++;
             }
         });
+        UpdateData();
     }
 
     private void UpdateData()
     {
-        int nextLevelMetalCost = 0;
-        int nextLevelCrystalCost = 0;
-        switch (resourceType)
-        {
-            case Resource.Type.Metal:
-                nextLevelMetalCost = Balancing.MetalMineUpgradeMetalCostPerLevel * building.Level;
-                nextLevelCrystalCost = Balancing.MetalMineUpgradeCrystalCostPerLevel * building.Level;
-                break;
-            case Resource.Type.Crystal:
-                nextLevelMetalCost = Balancing.CrystalMineUpgradeMetalCostPerLevel * building.Level;
-                nextLevelCrystalCost = Balancing.CrystalMineUpgradeCrystalCostPerLevel * building.Level;
-                break;
-            default:
-                Debug.Break();
-                break;
-        }
+        (int nextLevelMetalCost, int nextLevelCrystalCost) = Balancing.BuldingUpgradeCost(resourceType, building.MaximumLevel + 1);
 
-        buildingLevelText.text = resourceType.ToString() + " Mine" + "\n" + "Level " + building.Level;
-        buildingUpgradeButtonText.text = "Build Level " + building.Level;
-        buildingUpgradeCostText.text = "Level " + building.Level + ":" + "\n"
-            + nextLevelMetalCost + " Metal" + "\n"
-            + nextLevelCrystalCost + " Crystal" + "\n"
-            + "(+" + Balancing.MetalIncrementPerLevel + " " + resourceType.ToString() + " / s)";
+        textName.text = resourceType.ToString() + " Mine";
+        textCurrentLevel.text = "Current Level: " + building.CurrentLevel;
+        textMaximumLevel.text = "Maximum Level: " + building.MaximumLevel;
+        textbutton.text = "Unlock Level " + (building.MaximumLevel + 1);
+        textUpgradeCost.text = nextLevelMetalCost + " Metal" + "\n"
+            + nextLevelCrystalCost + " Crystal" + "\n";
+        textAssignedWorkers.text = "Worker: " + building.WorkersAssigend;
     }
 
     #endregion

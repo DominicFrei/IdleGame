@@ -10,16 +10,14 @@ internal class Unit : RealmObject
 
     [PrimaryKey]
     internal string Name { get; private set; } = Type.NotSet.ToString();
-    internal int Amount { get; set; } = default;
+    internal int Amount { get; set; } = 0;
 
-    internal int Available { get; set; } = default;
+    internal int Available { get; set; } = 0;
 
     internal Unit() { }
 
-    internal Unit(string name, int amount, int available)
+    internal Unit(string name)
     {
         Name = name;
-        Amount = amount;
-        Available = available;
     }
 }

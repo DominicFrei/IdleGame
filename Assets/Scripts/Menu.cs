@@ -5,17 +5,18 @@ public class Menu : MonoBehaviour
 {
     public void HomeSceneButtonClicked()
     {
-        SceneManager.LoadScene("00_Home");
+        SceneManager.LoadScene("01_Home");
     }
 
     public void BuildingsSceneButtonClicked()
     {
-        SceneManager.LoadScene("01_Buildings");
+        SceneManager.LoadScene("02_Buildings");
     }
 
     public void UnitsSceneButtonClick()
     {
-        SceneManager.LoadScene("02_Units");
+        SceneManager.LoadScene("03_Units");
+        Debug.Log("123");
     }
-    
+
 }
